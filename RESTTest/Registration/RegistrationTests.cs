@@ -3,7 +3,6 @@ using NUnit.Framework;
 using RestSharp;
 using RESTTest.Registration.Requests;
 using RESTTest.Registration.TestData;
-using System.Linq;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
 
