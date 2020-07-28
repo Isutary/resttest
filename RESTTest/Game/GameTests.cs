@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
+using RESTTest.Common.Generators;
 using RESTTest.Common.Setup;
 using RESTTest.Game.Requests;
 using RESTTest.Game.TestData;
@@ -13,24 +14,6 @@ namespace RESTTest.Game
 {
     public class GameTests : HeaderSetupFixture
     {
-        private string GameId;
-        private void GetTestGameID(string code)
-        {
-            Init(Constants.Path.Game, Method.GET);
-            request.AddParameter("from", DateTime.Now.AddMonths(-1).ToString(CommonConstants.Time.Format));
-            request.AddParameter("to", DateTime.Now.AddMonths(1).ToString(CommonConstants.Time.Format));
-            request.AddParameter("page", Constants.Query.Page);
-            request.AddParameter("pageSize", Constants.Query.PageSize);
-
-            IRestResponse response = client.Execute(request);
-            JObject json = JObject.Parse(response.Content);
-
-            GameId = json["records"]
-                .Where(x => x["gameCode"].ToString() == code)
-                .Select(x => x)
-                .FirstOrDefault()["id"]
-                .ToString();
-        }
         public GameTests() : base(CommonConstants.Host.GameService) { }
 
         [TestCaseSource(typeof(GameData), nameof(GameData.IncorrectGameCode))]
@@ -168,15 +151,17 @@ namespace RESTTest.Game
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            request.Parameters.RemoveAll(x => x.Type == ParameterType.RequestBody);
-            GetTestGameID(code);
+            string id = GameGenerator.GetGameId(client, request, code);
+            Init(Constants.Path.Game + $"/{id}", Method.DELETE);
+            GameGenerator.DeleteGame(client, request);
+
         }
 
         [Test]
         [Order(2)]
         public void GameTests_GetGameById()
         {
-            Init(Constants.Path.Game + $"/{GameId}", Method.GET);
+            Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.GET);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
@@ -189,7 +174,7 @@ namespace RESTTest.Game
         [Order(2)]
         public void GameTests_Empty_First_Prize(string first, string consolation, string recurring, string pattern)
         {
-            Init(Constants.Path.Game + $"/{GameId}", Method.PUT);
+            Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.PUT);
             string open = DateTime.Now.AddMinutes(5).ToString(CommonConstants.Time.Format);
             string end = DateTime.Now.AddMinutes(8).ToString(CommonConstants.Time.Format);
             request.AddJsonBody(new UpdateGameRequest(first, consolation, open, end, recurring, pattern));
@@ -205,7 +190,7 @@ namespace RESTTest.Game
         [Order(2)]
         public void GameTests_Empty_Consolation_Prize(string first, string consolation, string recurring, string pattern)
         {
-            Init(Constants.Path.Game + $"/{GameId}", Method.PUT);
+            Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.PUT);
             string open = DateTime.Now.AddMinutes(5).ToString(CommonConstants.Time.Format);
             string end = DateTime.Now.AddMinutes(8).ToString(CommonConstants.Time.Format);
             request.AddJsonBody(new UpdateGameRequest(first, consolation, open, end, recurring, pattern));
@@ -221,7 +206,7 @@ namespace RESTTest.Game
         [Order(2)]
         public void GameTests_Game_Should_Update(string first, string consolation, string recurring, string pattern)
         {
-            Init(Constants.Path.Game + $"/{GameId}", Method.PUT);
+            Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.PUT);
             string open = DateTime.Now.AddMinutes(5).ToString(CommonConstants.Time.Format);
             string end = DateTime.Now.AddMinutes(8).ToString(CommonConstants.Time.Format);
             request.AddJsonBody(new UpdateGameRequest(first, consolation, open, end, recurring, pattern));
@@ -235,7 +220,7 @@ namespace RESTTest.Game
         [Order(3)]
         public void GameTests_Delete_Should_Work()
         {
-            Init(Constants.Path.Game + $"/{GameId}", Method.DELETE);
+            Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.DELETE);
 
             IRestResponse response = client.Execute(request);
 

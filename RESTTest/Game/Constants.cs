@@ -23,7 +23,8 @@
                 public const string IncorrectCode = "AAABBB";
                 public const string TakenCode = "E83Q0B";
                 public const string IncorrectRecurring = "a";
-                public const string CorrectCode = "000000";
+                public const string CorrectCode = "999999";
+                public const string TestGameCode = "000000";
             }
         }
     }
