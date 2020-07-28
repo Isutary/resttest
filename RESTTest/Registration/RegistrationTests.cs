@@ -11,7 +11,7 @@ namespace RESTTest.Registration
 {
     public class RegistrationTests : HeaderSetupFixture
     {
-        public string PlayerID { get; set; }
+        private string PlayerID;
 
         public RegistrationTests() : base(CommonConstants.Host.IdentityService) { }
 

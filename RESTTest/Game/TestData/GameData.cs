@@ -36,7 +36,7 @@ namespace RESTTest.Game.TestData
 
         public static object[] CorrectInformation = {
             new string[] {
-                Constants.Data.Game.IncorrectCode,
+                Constants.Data.Game.CorrectCode,
                 Constants.Data.Game.Prize,
                 Constants.Data.Game.Prize,
                 CommonConstants.Data.False,

@@ -24,14 +24,14 @@ namespace RESTTest.Prize
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.Contains("status", string.Join(" ", json["records"].First().ToString()));
-            StringAssert.Contains("awardedAt", string.Join(" ", json["records"].First().ToString()));
-            StringAssert.Contains("prizePosition", string.Join(" ", json["records"].First().ToString()));
-            StringAssert.Contains("prizeType", string.Join(" ", json["records"].First().ToString()));
-            StringAssert.Contains("playerId", string.Join(" ", json["records"].First().ToString()));
-            StringAssert.Contains("hostId", string.Join(" ", json["records"].First().ToString()));
-            StringAssert.Contains("prizeDescription", string.Join(" ", json["records"].First().ToString()));
-            StringAssert.Contains("id", string.Join(" ", json["records"].First().ToString()));
+            StringAssert.Contains("status", json["records"].First().ToString());
+            StringAssert.Contains("awardedAt", json["records"].First().ToString());
+            StringAssert.Contains("prizePosition", json["records"].First().ToString());
+            StringAssert.Contains("prizeType", json["records"].First().ToString());
+            StringAssert.Contains("playerId", json["records"].First().ToString());
+            StringAssert.Contains("hostId", json["records"].First().ToString());
+            StringAssert.Contains("prizeDescription", json["records"].First().ToString());
+            StringAssert.Contains("id", json["records"].First().ToString());
         }
 
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.AlreadyClaimed))]

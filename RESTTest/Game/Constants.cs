@@ -8,6 +8,12 @@
             public const string NextGame = Game + "/nextgameinfo";
         }
 
+        public static class Query
+        {
+            public const string Page = "1";
+            public const string PageSize = "50";
+        }
+
         public static class Data
         {
             public static class Game
@@ -17,6 +23,7 @@
                 public const string IncorrectCode = "AAABBB";
                 public const string TakenCode = "E83Q0B";
                 public const string IncorrectRecurring = "a";
+                public const string CorrectCode = "000000";
             }
         }
     }
