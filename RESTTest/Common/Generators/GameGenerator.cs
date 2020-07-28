@@ -27,19 +27,20 @@ namespace RESTTest.Common.Generators
             ));
 
             client.Execute(request);
-            request.Parameters.RemoveAll(x => x.Type == ParameterType.RequestBody);
-            Id = GetGameId(client, request, code);
+            Id = GetGameId(client, code);
         }
 
-        public static string GetGameId(RestClient client, RestRequest request, string code)
+        public static string GetGameId(RestClient client, string code)
         {
-            request.Method = Method.GET;
-            
+            RestRequest request = new RestRequest(Game.Constants.Path.Game, Method.GET);
+
+            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
+            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+
             request.AddParameter("from", DateTime.Now.AddMonths(-1).ToString(CommonConstants.Time.Format));
             request.AddParameter("to", DateTime.Now.AddMonths(1).ToString(CommonConstants.Time.Format));
             request.AddParameter("page", Game.Constants.Query.Page);
             request.AddParameter("pageSize", Game.Constants.Query.PageSize);
-
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);

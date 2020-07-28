@@ -4,7 +4,7 @@ using RestSharp;
 
 namespace RESTTest.Common.Setup
 {
-    public class AuthenticationSetupFixture
+    public static class AuthenticationSetupFixture
     {
         private class ClientConfig
         {
@@ -17,13 +17,13 @@ namespace RESTTest.Common.Setup
             public string Password { get; set; } = CommonConstants.Setup.Authentication.Password;
         }
 
-        private readonly RestClient client = new RestClient(CommonConstants.Host.IdentityService);
+        private static readonly RestClient client = new RestClient(CommonConstants.Host.IdentityService);
         
-        private readonly RestRequest request = new RestRequest(CommonConstants.Setup.Authentication.Path, Method.POST);
+        private static readonly RestRequest request = new RestRequest(CommonConstants.Setup.Authentication.Path, Method.POST);
 
-        public readonly string token = "Bearer ";
+        public static readonly string token = "Bearer ";
 
-        public AuthenticationSetupFixture()
+        static AuthenticationSetupFixture()
         {
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded")
                 .AddObject(new ClientConfig());

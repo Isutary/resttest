@@ -151,10 +151,9 @@ namespace RESTTest.Game
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            string id = GameGenerator.GetGameId(client, request, code);
+            string id = GameGenerator.GetGameId(client, code);
             Init(Constants.Path.Game + $"/{id}", Method.DELETE);
             GameGenerator.DeleteGame(client, request);
-
         }
 
         [Test]
@@ -167,7 +166,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(Constants.Data.Game.CorrectCode, json["records"]["gameCode"].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Data.Game.TestGameCode, json["records"]["gameCode"].ToString());
         }
 
         [TestCaseSource(typeof(UpdateData), nameof(UpdateData.EmptyFirstPrize))]

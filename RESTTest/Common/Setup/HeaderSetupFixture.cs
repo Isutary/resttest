@@ -3,7 +3,7 @@ using CommonConstants = RESTTest.Common.Constants;
 
 namespace RESTTest.Common.Setup
 {
-    public class HeaderSetupFixture : AuthenticationSetupFixture
+    public class HeaderSetupFixture
     {
         protected readonly RestClient client;
 
@@ -19,7 +19,7 @@ namespace RESTTest.Common.Setup
             request = new RestRequest(resource, method);
 
             request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", token);
+            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
         }
     }
 }
