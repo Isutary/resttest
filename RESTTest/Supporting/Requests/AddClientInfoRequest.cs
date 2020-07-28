@@ -2,11 +2,9 @@
 {
     public class AddClientInfoRequest
     {
-        public string AndroidMinimumAllowedClientVersion;
-
-        public string IosMinimumAllowedClientVersion;
-
-        public string IsInMaintenanceMode;
+        public string AndroidMinimumAllowedClientVersion { get; set; }
+        public string IosMinimumAllowedClientVersion { get; set; }
+        public string IsInMaintenanceMode { get; set; }
 
         public AddClientInfoRequest(string amacv, string imacv, string iimm)
         {

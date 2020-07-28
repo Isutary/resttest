@@ -3,11 +3,11 @@
     public class DefaultImageData
     {
         public static string[] CorrectDefault = { 
-            "1"
+            Constants.Data.DefaultImage.Correct
         };
 
         public static string[] IncorrectDefault = {
-            "10"
+            Constants.Data.DefaultImage.Incorrect
         };
     }
 }

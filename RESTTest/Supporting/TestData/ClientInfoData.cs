@@ -1,18 +1,32 @@
-﻿namespace RESTTest.Supporting.TestData
+﻿using CommonConstants = RESTTest.Common.Constants;
+
+namespace RESTTest.Supporting.TestData
 {
     public class ClientInfoData
     {
         public static object[] CurrentSettings = { 
-            new string[] { "1.0.0", "0.40.35", "false" }
+            new string[] { 
+                Constants.Data.ClientInfo.CurrentAMACV, 
+                Constants.Data.ClientInfo.CurrentIMACV, 
+                Constants.Data.ClientInfo.CurrentIIMM 
+            }
         };
 
         public static object[] CorrectSettings = {
-            new string[] { "2.0.0", "1.40.35", "true" },
+            new string[] {
+                Constants.Data.ClientInfo.Correct,
+                Constants.Data.ClientInfo.Correct,
+                CommonConstants.Data.True
+            },
             CurrentSettings[0]
         };
 
         public static object[] IncorrectSettings = { 
-            new string[] { "0", "0", "false" }
+            new string[] {
+                Constants.Data.ClientInfo.Incorrect,
+                Constants.Data.ClientInfo.Incorrect,
+                CommonConstants.Data.False
+            }
         };
     }
 }

@@ -1,64 +1,66 @@
-﻿namespace RESTTest.Game.TestData
+﻿using CommonConstants = RESTTest.Common.Constants;
+
+namespace RESTTest.Game.TestData
 {
     public class GameData
     {
         public static object[] EmptyGameCode = {
             new string[] {
-                "",
-                "Rest auto test",
-                "Rest auto test",
-                "false",
-                "N/A"
+                CommonConstants.Data.Empty,
+                Constants.Data.Game.Prize,
+                Constants.Data.Game.Prize,
+                CommonConstants.Data.False,
+                Constants.Data.Game.NonRecurring
             }
         };
 
         public static object[] EmptyFirstPrize = {
             new string[] {
-                "AAABBB",
-                "",
-                "Rest auto test",
-                "false",
-                "N/A"
+                Constants.Data.Game.IncorrectCode,
+                CommonConstants.Data.Empty,
+                Constants.Data.Game.Prize,
+                CommonConstants.Data.False,
+                Constants.Data.Game.NonRecurring
             }
         };
 
         public static object[] EmptyConsolationPrize = {
             new string[] {
-                "AAABBB",
-                "Rest auto test",
-                "",
-                "false",
-                "N/A"
+                Constants.Data.Game.IncorrectCode,
+                Constants.Data.Game.Prize,
+                CommonConstants.Data.Empty,
+                CommonConstants.Data.False,
+                Constants.Data.Game.NonRecurring
             }
         };
 
         public static object[] CorrectInformation = {
             new string[] {
-                "AAABBB",
-                "Rest auto test",
-                "Rest auto test",
-                "false",
-                "N/A"
+                Constants.Data.Game.IncorrectCode,
+                Constants.Data.Game.Prize,
+                Constants.Data.Game.Prize,
+                CommonConstants.Data.False,
+                Constants.Data.Game.NonRecurring
             }
         };
 
         public static object[] IncorrectRecurring = {
             new string[] {
-                "AAABBB",
-                "Rest auto test",
-                "Rest auto test",
-                "true",
-                "a"
+                Constants.Data.Game.IncorrectCode,
+                Constants.Data.Game.Prize,
+                Constants.Data.Game.Prize,
+                CommonConstants.Data.True,
+                Constants.Data.Game.IncorrectRecurring
             }
         };
 
         public static object[] TakenGameCode = {
             new string[] {
-                "E83Q0B",
-                "Rest auto test",
-                "Rest auto test",
-                "false",
-                "N/A"
+                Constants.Data.Game.TakenCode,
+                Constants.Data.Game.Prize,
+                Constants.Data.Game.Prize,
+                CommonConstants.Data.False,
+                Constants.Data.Game.NonRecurring
             }
         };
     }

@@ -1,6 +1,7 @@
 ﻿using RestSharp;
+using CommonConstants = RESTTest.Common.Constants;
 
-namespace RESTTest
+namespace RESTTest.Common.Setup
 {
     public class HeaderSetupFixture : AuthenticationSetupFixture
     {
@@ -17,7 +18,7 @@ namespace RESTTest
         {
             request = new RestRequest(resource, method);
 
-            request.AddHeader("x-tenant-id", "rps-live");
+            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
             request.AddHeader("Authorization", token);
         }
     }

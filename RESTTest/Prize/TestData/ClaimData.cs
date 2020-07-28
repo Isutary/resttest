@@ -1,21 +1,43 @@
-﻿namespace RESTTest.Prize.TestData
+﻿using CommonConstants = RESTTest.Common.Constants;
+
+namespace RESTTest.Prize.TestData
 {
     public class ClaimData
     {
         public static object[] AlreadyClaimed = {
-            new string[] { "6351e7d8-8714-44ba-58c4-08d8272f665d", "Salt", "salt@automation.com", "+3874568711" }
+            new string[] { 
+                Constants.Data.Claim.TakenId,
+                Constants.Data.Claim.Username,
+                Constants.Data.Claim.Email,
+                Constants.Data.Claim.Phone
+            }
         };
 
         public static object[] EmptyClaim = {
-            new string[] { "91659763-da76-45da-29d9-08d82fe6b8d8", "", "", "" }
+            new string[] { 
+                Constants.Data.Claim.CorrectId,
+                CommonConstants.Data.Empty,
+                CommonConstants.Data.Empty,
+                CommonConstants.Data.Empty
+            }
         };
 
         public static object[] CorrectClaim = {
-            new string[] { "91659763-da76-45da-29d9-08d82fe6b8d8", "Salt", "salt@paypal.com", "+123456" }
+            new string[] { 
+                Constants.Data.Claim.CorrectId,
+                Constants.Data.Claim.Username,
+                Constants.Data.Claim.Email,
+                Constants.Data.Claim.Phone
+            }
         };
 
         public static object[] IncorrectClaim = {
-            new string[] { "91659763-0000-0000-0000-08d82fe6b8d8", "Salt", "salt@paypal.com", "+123456" }
+            new string[] {
+                Constants.Data.Claim.IncorrectId,
+                Constants.Data.Claim.Username,
+                Constants.Data.Claim.Email,
+                Constants.Data.Claim.Phone
+            }
         };
     }
 }

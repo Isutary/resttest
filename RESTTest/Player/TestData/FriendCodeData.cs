@@ -3,11 +3,11 @@
     public class FriendCodeData
     {
         public static string[] IncorrectName = {
-            "Kostas.Antonopolous"
+            Constants.Data.FriendCode.Incorrect
         };
 
         public static string[] CorrectName = {
-            "pepper"
+            Constants.Data.FriendCode.Correct
         };
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
+using RESTTest.Common.Setup;
 using RESTTest.Supporting.Requests;
 using RESTTest.Supporting.TestData;
 using System.Net;
@@ -10,12 +11,12 @@ namespace RESTTest.Supporting
 {
     public class SupportingTests : HeaderSetupFixture
     {
-        public SupportingTests() : base(CommonConstants.RestClient.SupportingService) { }
+        public SupportingTests() : base(CommonConstants.Host.SupportingService) { }
 
         [TestCaseSource(typeof(ClientInfoData), nameof(ClientInfoData.CurrentSettings))]
         public void SupportingTests_GetClientInfo(string amacv, string imacv, string iimm)
         {
-            Init(Constants.ClientInfo, Method.GET);
+            Init(Constants.Path.ClientInfo, Method.GET);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
@@ -30,7 +31,7 @@ namespace RESTTest.Supporting
         [TestCaseSource(typeof(ClientInfoData), nameof(ClientInfoData.CorrectSettings))]
         public void SupportingTests_AddClientInfo_Should_Change(string amacv, string imacv, string iimm)
         {
-            Init(Constants.ClientInfo, Method.PUT);
+            Init(Constants.Path.ClientInfo, Method.PUT);
             request.AddJsonBody(new AddClientInfoRequest(amacv, imacv, iimm));
 
             IRestResponse response = client.Execute(request);
@@ -41,7 +42,7 @@ namespace RESTTest.Supporting
         [TestCaseSource(typeof(ClientInfoData), nameof(ClientInfoData.IncorrectSettings))]
         public void SupportingTests_AddClientInfo_Incorrect_Format(string amacv, string imacv, string iimm)
         {
-            Init(Constants.ClientInfo, Method.PUT);
+            Init(Constants.Path.ClientInfo, Method.PUT);
             request.AddJsonBody(new AddClientInfoRequest(amacv, imacv, iimm));
 
             IRestResponse response = client.Execute(request);

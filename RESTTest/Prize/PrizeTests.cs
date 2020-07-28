@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
+using RESTTest.Common.Setup;
 using RESTTest.Prize.Requests;
 using RESTTest.Prize.TestData;
 using RESTTest.Winner;
@@ -12,12 +13,12 @@ namespace RESTTest.Prize
 {
     public class PrizeTests : HeaderSetupFixture
     {
-        public PrizeTests() : base(CommonConstants.RestClient.GameService) { }
+        public PrizeTests() : base(CommonConstants.Host.GameService) { }
 
         [Test]
         public void PrizeTests_GetUnclaimedPrizes()
         {
-            Init(Constants.Prize, Method.GET);
+            Init(Constants.Path.Prize, Method.GET);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
@@ -36,7 +37,7 @@ namespace RESTTest.Prize
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.AlreadyClaimed))]
         public void PrizeTests_Prize_Already_Claimed(string id, string name, string paypal, string phone)
         {
-            Init(Constants.Prize, Method.POST);
+            Init(Constants.Path.Prize, Method.POST);
             request.AddJsonBody(new ClaimPasswordRequest(id, name, paypal, phone));
 
             IRestResponse response = client.Execute(request);
@@ -49,7 +50,7 @@ namespace RESTTest.Prize
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.EmptyClaim))]
         public void PrizeTests_Claim_Cannot_Be_Empty(string id, string name, string paypal, string phone)
         {
-            Init(Constants.Prize, Method.POST);
+            Init(Constants.Path.Prize, Method.POST);
             request.AddJsonBody(new ClaimPasswordRequest(id, name, paypal, phone));
 
             IRestResponse response = client.Execute(request);
@@ -63,7 +64,7 @@ namespace RESTTest.Prize
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.CorrectClaim))]
         public void PrizeTests_Should_Claim(string id, string name, string paypal, string phone)
         {
-            Init(Constants.Prize, Method.POST);
+            Init(Constants.Path.Prize, Method.POST);
             request.AddJsonBody(new ClaimPasswordRequest(id, name, paypal, phone));
 
             IRestResponse response = client.Execute(request);
@@ -79,7 +80,7 @@ namespace RESTTest.Prize
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.IncorrectClaim))]
         public void PrizeTests_Wrong_Claim_ID(string id, string name, string paypal, string phone)
         {
-            Init(Constants.Prize, Method.POST);
+            Init(Constants.Path.Prize, Method.POST);
             request.AddJsonBody(new ClaimPasswordRequest(id, name, paypal, phone));
 
             IRestResponse response = client.Execute(request);

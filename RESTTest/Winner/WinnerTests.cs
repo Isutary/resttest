@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
+using RESTTest.Common.Setup;
 using RESTTest.Winner.Requests;
 using RESTTest.Winner.TestData;
 using System;
@@ -12,12 +13,12 @@ namespace RESTTest.Winner
 {
     public class WinnerTests : HeaderSetupFixture
     {
-        public WinnerTests() : base(CommonConstants.RestClient.GameService) { }
+        public WinnerTests() : base(CommonConstants.Host.GameService) { }
 
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.CorrectClaim))]
         public void WinnerTests_Should_Change(string status)
         {
-            Init(Constants.Prize, Method.PUT);
+            Init(Constants.Path.Prize, Method.PUT);
             request.AddJsonBody(new ClaimRequest(status));
 
             IRestResponse response = client.Execute(request);
@@ -28,7 +29,7 @@ namespace RESTTest.Winner
         [Test]
         public void WinnerTests_GetWinnerDetails()
         {
-            Init(Constants.Prize, Method.GET);
+            Init(Constants.Path.Prize, Method.GET);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
@@ -48,19 +49,19 @@ namespace RESTTest.Winner
         [Test]
         public void WinnerTests_GetWinners()
         {
-            Init(Constants.Winner, Method.GET);
-            request.AddParameter("from", DateTime.Now.AddMonths(-1).ToString("yyyy-MM-ddTHH:mm:ssZ"));
-            request.AddParameter("to", DateTime.Now.AddMonths(1).ToString("yyyy-MM-ddTHH:mm:ssZ"));
-            request.AddParameter("page", Constants.Page);
-            request.AddParameter("pageSize", Constants.PageSize);
+            Init(Constants.Path.Winner, Method.GET);
+            request.AddParameter("from", DateTime.Now.AddMonths(-1).ToString(CommonConstants.Time.Format));
+            request.AddParameter("to", DateTime.Now.AddMonths(1).ToString(CommonConstants.Time.Format));
+            request.AddParameter("page", Constants.Query.Page);
+            request.AddParameter("pageSize", Constants.Query.PageSize);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(Constants.PageSize, json["records"].Count().ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Page, json["paginationInfo"]["page"].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.PageSize, json["paginationInfo"]["pageSize"].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json["records"].Count().ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Query.Page, json["paginationInfo"]["page"].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json["paginationInfo"]["pageSize"].ToString());
         }
     }
 }

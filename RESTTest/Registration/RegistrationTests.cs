@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
+using RESTTest.Common.Setup;
 using RESTTest.Registration.Requests;
 using RESTTest.Registration.TestData;
 using System.Net;
@@ -12,13 +13,13 @@ namespace RESTTest.Registration
     {
         public string PlayerID { get; set; }
 
-        public RegistrationTests() : base(CommonConstants.RestClient.IdentityService) { }
+        public RegistrationTests() : base(CommonConstants.Host.IdentityService) { }
 
         [TestCaseSource(typeof(DefaultImageData), nameof(DefaultImageData.CorrectDefault))]
         [Order(1)]
         public void RegistrationTests_Correct_Default_Profile_Picture(string value)
         {
-            Init(Constants.DefaultProfilePicture + value, Method.PUT);
+            Init(Constants.Path.DefaultProfilePicture + value, Method.PUT);
 
             IRestResponse response = client.Execute(request);
 
@@ -29,7 +30,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Incorrect_Default_Profile_Picture(string value)
         {
-            Init(Constants.DefaultProfilePicture + value, Method.PUT);
+            Init(Constants.Path.DefaultProfilePicture + value, Method.PUT);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
@@ -42,7 +43,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Account_Does_Not_Exist(string email)
         {
-            Init(Constants.Search, Method.GET);
+            Init(Constants.Path.Search, Method.GET);
             request.AddParameter("email", email);
 
             IRestResponse response = client.Execute(request);
@@ -56,7 +57,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Account_Does_Exist(string email)
         {
-            Init(Constants.Search, Method.GET);
+            Init(Constants.Path.Search, Method.GET);
             request.AddParameter("email", email);
 
             IRestResponse response = client.Execute(request);
@@ -70,7 +71,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Username_Does_Not_Exist(string user)
         {
-            Init(Constants.Search, Method.GET);
+            Init(Constants.Path.Search, Method.GET);
             request.AddParameter("username", user);
 
             IRestResponse response = client.Execute(request);
@@ -84,7 +85,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Username_Does_Exist(string user)
         {
-            Init(Constants.Search, Method.GET);
+            Init(Constants.Path.Search, Method.GET);
             request.AddParameter("username", user);
 
             IRestResponse response = client.Execute(request);
@@ -98,7 +99,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Cannot_Be_Empty(string password, string user, string email, string hand) 
         {
-            Init(Constants.Register, Method.POST);
+            Init(Constants.Path.Register, Method.POST);
             request.AddJsonBody(new RegisterAccountRequest(password, user, email, hand));
 
             IRestResponse response = client.Execute(request);
@@ -114,7 +115,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Not_Long_Enough(string password, string user, string email, string hand)
         {
-            Init(Constants.Register, Method.POST);
+            Init(Constants.Path.Register, Method.POST);
             request.AddJsonBody(new RegisterAccountRequest(password, user, email, hand));
 
             IRestResponse response = client.Execute(request);
@@ -129,7 +130,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Incorrect_Email_Format(string password, string user, string email, string hand)
         {
-            Init(Constants.Register, Method.POST);
+            Init(Constants.Path.Register, Method.POST);
             request.AddJsonBody(new RegisterAccountRequest(password, user, email, hand));
 
             IRestResponse response = client.Execute(request);
@@ -143,7 +144,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Username_Taken(string password, string user, string email, string hand)
         {
-            Init(Constants.Register, Method.POST);
+            Init(Constants.Path.Register, Method.POST);
             request.AddJsonBody(new RegisterAccountRequest(password, user, email, hand));
 
             IRestResponse response = client.Execute(request);
@@ -157,7 +158,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Email_Taken(string password, string user, string email, string hand)
         {
-            Init(Constants.Register, Method.POST);
+            Init(Constants.Path.Register, Method.POST);
             request.AddJsonBody(new RegisterAccountRequest(password, user, email, hand));
 
             IRestResponse response = client.Execute(request);
@@ -171,7 +172,7 @@ namespace RESTTest.Registration
         [Order(1)]
         public void RegistrationTests_Should_Register(string password, string user, string email, string hand)
         {
-            Init(Constants.Register, Method.POST);
+            Init(Constants.Path.Register, Method.POST);
             request.AddJsonBody(new RegisterAccountRequest(password, user, email, hand));
 
             IRestResponse response = client.Execute(request);
@@ -186,7 +187,7 @@ namespace RESTTest.Registration
         [Order(2)]
         public void RegistrationTests_Should_Delete()
         {
-            Init(Constants.User + $"/{PlayerID}", Method.DELETE);
+            Init(Constants.Path.User + $"/{PlayerID}", Method.DELETE);
 
             IRestResponse response = client.Execute(request);
 

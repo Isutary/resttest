@@ -3,11 +3,11 @@
     public class UsernameSearchData
     {
         public static string[] IncorrectUsername = {
-            "randomaccountname"
+            Constants.Data.UsernameSearch.Incorrect
         };
 
         public static string[] CorrectUsername = {
-            "salt"
+            Constants.Data.UsernameSearch.Correct
         };
     }
 }

@@ -1,25 +1,47 @@
-﻿namespace RESTTest.Identity.TestData
+﻿using CommonConstants = RESTTest.Common.Constants;
+
+namespace RESTTest.Identity.TestData
 {
     public class PasswordData
     {
         public static object[] IncorrectPassword = {
-            new string[] { "asd", "Plavi.12.", "Plavi.12." }
+            new string[] { 
+                Constants.Data.Password.Incorrect, 
+                Constants.Data.Password.Correct, 
+                Constants.Data.Password.Correct 
+            }
         };
 
         public static object[] IncorrectPasswordLength = {
-            new string[] { "Plavi.12.", "asd", "asd" }
+            new string[] {
+                Constants.Data.Password.Correct,
+                Constants.Data.Password.Incorrect, 
+                Constants.Data.Password.Incorrect
+            }
         };
 
         public static object[] IncorrectRepeatPassword = {
-            new string[] { "Plavi.12.", "Plavi.12.", "asd" }
+            new string[] { 
+                Constants.Data.Password.Correct,
+                Constants.Data.Password.Correct,
+                Constants.Data.Password.Incorrect
+            }
         };
 
         public static object[] EmptyPassword = {
-            new string[] { "", "", "" }
+            new string[] {
+                CommonConstants.Data.Empty,
+                CommonConstants.Data.Empty,
+                CommonConstants.Data.Empty
+            }
         };
 
         public static object[] CorrectPassword = {
-            new string[] { "Plavi.12.", "Plavi.12.", "Plavi.12." }
+            new string[] { 
+                Constants.Data.Password.Correct,
+                Constants.Data.Password.Correct,
+                Constants.Data.Password.Correct
+            }
         };
     }
 }

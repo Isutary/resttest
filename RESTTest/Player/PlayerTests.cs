@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
+using RESTTest.Common.Setup;
 using RESTTest.Player.Requests;
 using RESTTest.Player.TestData;
 using System.Net;
@@ -10,12 +11,12 @@ namespace RESTTest.Player
 {
     public class PlayerTests : HeaderSetupFixture
     {
-        public PlayerTests() : base(CommonConstants.RestClient.GameService) { }
+        public PlayerTests() : base(CommonConstants.Host.GameService) { }
 
         [TestCaseSource(typeof(GoldenLivesData), nameof(GoldenLivesData.NegativeValue))]
         public void PlayerTests_Negative_Number_Of_Lives(string lives)
         {
-            Init(Constants.GoldenLives, Method.PUT);
+            Init(Constants.Path.GoldenLives, Method.PUT);
             request.AddJsonBody(new GoldenLivesRequest(lives));
 
             IRestResponse response = client.Execute(request);
@@ -28,7 +29,7 @@ namespace RESTTest.Player
         [TestCaseSource(typeof(SettingsData), nameof(SettingsData.IncorrectColor))]
         public void PlayerTests_Incorrect_Hand_Color(string hand, string amp, string apn, string sound)
         {
-            Init(Constants.Settings, Method.PUT);
+            Init(Constants.Path.Settings, Method.PUT);
             request.AddJsonBody(new UpdateSettingsRequest(hand, amp, apn, sound));
 
             IRestResponse response = client.Execute(request);
@@ -41,7 +42,7 @@ namespace RESTTest.Player
         [TestCaseSource(typeof(SettingsData), nameof(SettingsData.CorrectColor))]
         public void PlayerTests_Correct_Hand_Color(string hand, string amp, string apn, string sound)
         {
-            Init(Constants.Settings, Method.PUT);
+            Init(Constants.Path.Settings, Method.PUT);
             request.AddJsonBody(new UpdateSettingsRequest(hand, amp, apn, sound));
 
             IRestResponse response = client.Execute(request);

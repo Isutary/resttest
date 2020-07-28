@@ -3,7 +3,7 @@
     public class GoldenLivesData
     {
         public static string[] NegativeValue = {
-            "-1"
+            Constants.Data.GoldenLives.Negative
         };
     }
 }

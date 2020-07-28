@@ -3,11 +3,11 @@
     public class PlayerAccountSearchData
     {
         public static string[] IncorrectAccount = {
-            "randomaccountname@random.com"
+            Constants.Data.AccountSearch.Incorrect
         };
 
         public static string[] CorrectAccount = {
-            "salt@test.com"
+            Constants.Data.AccountSearch.Correct
         };
     }
 }
