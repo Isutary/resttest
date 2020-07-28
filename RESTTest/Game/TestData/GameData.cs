@@ -4,7 +4,7 @@ namespace RESTTest.Game.TestData
 {
     public class GameData
     {
-        public static object[] EmptyGameCode = {
+        public static object[] IncorrectGameCode = {
             new string[] {
                 CommonConstants.Data.Empty,
                 Constants.Data.Game.Prize,

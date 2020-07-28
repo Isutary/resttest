@@ -7,6 +7,7 @@ using RESTTest.Winner.TestData;
 using System;
 using System.Linq;
 using System.Net;
+using PrizeData = RESTTest.Prize.Constants.Data.Claim;
 using CommonConstants = RESTTest.Common.Constants;
 
 namespace RESTTest.Winner
@@ -35,11 +36,11 @@ namespace RESTTest.Winner
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase("Salt", json["records"]["firstName"].ToString());
-            StringAssert.AreEqualIgnoringCase("salt@paypal.com", json["records"]["paypalAddress"].ToString());
-            StringAssert.AreEqualIgnoringCase("+123456", json["records"]["phoneNumber"].ToString());
-            StringAssert.AreEqualIgnoringCase("Salt", json["records"]["userName"].ToString());
-            StringAssert.AreEqualIgnoringCase("91659763-da76-45da-29d9-08d82fe6b8d8", json["records"]["claimRequestId"].ToString());
+            StringAssert.AreEqualIgnoringCase(PrizeData.Username, json["records"]["firstName"].ToString());
+            StringAssert.AreEqualIgnoringCase(PrizeData.Email, json["records"]["paypalAddress"].ToString());
+            StringAssert.AreEqualIgnoringCase(PrizeData.Phone, json["records"]["phoneNumber"].ToString());
+            StringAssert.AreEqualIgnoringCase(PrizeData.Username, json["records"]["userName"].ToString());
+            StringAssert.AreEqualIgnoringCase(PrizeData.CorrectId, json["records"]["claimRequestId"].ToString());
             StringAssert.AreEqualIgnoringCase("1st", json["records"]["prizePosition"].ToString());
             StringAssert.AreEqualIgnoringCase("RESTTest Prize", json["records"]["prizeDescription"].ToString());
             StringAssert.AreEqualIgnoringCase("Not claimed", json["records"]["status"].ToString());

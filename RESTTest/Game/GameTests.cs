@@ -14,7 +14,7 @@ namespace RESTTest.Game
     {
         public GameTests() : base(CommonConstants.Host.GameService) { }
 
-        [TestCaseSource(typeof(GameData), nameof(GameData.EmptyGameCode))]
+        [TestCaseSource(typeof(GameData), nameof(GameData.IncorrectGameCode))]
         public void GameTests_Game_Code_Cannot_Be_Empty(string code, string first, string consolation, string recurring, string pattern)
         {
             Init(Constants.Path.Game, Method.POST);
