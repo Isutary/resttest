@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
+using RESTTest.Common.Generators;
 using RESTTest.Common.Setup;
 using RESTTest.Registration.Requests;
 using RESTTest.Registration.TestData;
@@ -11,12 +12,9 @@ namespace RESTTest.Registration
 {
     public class RegistrationTests : HeaderSetupFixture
     {
-        private string PlayerID;
-
         public RegistrationTests() : base(CommonConstants.Host.IdentityService) { }
 
         [TestCaseSource(typeof(DefaultImageData), nameof(DefaultImageData.CorrectDefault))]
-        [Order(1)]
         public void RegistrationTests_Correct_Default_Profile_Picture(string value)
         {
             Init(Constants.Path.DefaultProfilePicture + value, Method.PUT);
@@ -27,7 +25,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(DefaultImageData), nameof(DefaultImageData.IncorrectDefault))]
-        [Order(1)]
         public void RegistrationTests_Incorrect_Default_Profile_Picture(string value)
         {
             Init(Constants.Path.DefaultProfilePicture + value, Method.PUT);
@@ -40,7 +37,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(PlayerAccountSearchData), nameof(PlayerAccountSearchData.IncorrectAccount))]
-        [Order(1)]
         public void RegistrationTests_Account_Does_Not_Exist(string email)
         {
             Init(Constants.Path.Search, Method.GET);
@@ -54,7 +50,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(PlayerAccountSearchData), nameof(PlayerAccountSearchData.CorrectAccount))]
-        [Order(1)]
         public void RegistrationTests_Account_Does_Exist(string email)
         {
             Init(Constants.Path.Search, Method.GET);
@@ -68,7 +63,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(UsernameSearchData), nameof(UsernameSearchData.IncorrectUsername))]
-        [Order(1)]
         public void RegistrationTests_Username_Does_Not_Exist(string user)
         {
             Init(Constants.Path.Search, Method.GET);
@@ -82,7 +76,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(UsernameSearchData), nameof(UsernameSearchData.CorrectUsername))]
-        [Order(1)]
         public void RegistrationTests_Username_Does_Exist(string user)
         {
             Init(Constants.Path.Search, Method.GET);
@@ -96,7 +89,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.EmptyInformation))]
-        [Order(1)]
         public void RegistrationTests_Cannot_Be_Empty(string password, string user, string email, string hand) 
         {
             Init(Constants.Path.Register, Method.POST);
@@ -112,7 +104,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.NotLongEnough))]
-        [Order(1)]
         public void RegistrationTests_Not_Long_Enough(string password, string user, string email, string hand)
         {
             Init(Constants.Path.Register, Method.POST);
@@ -127,7 +118,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.IncorrectEmail))]
-        [Order(1)]
         public void RegistrationTests_Incorrect_Email_Format(string password, string user, string email, string hand)
         {
             Init(Constants.Path.Register, Method.POST);
@@ -141,7 +131,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.TakenUsername))]
-        [Order(1)]
         public void RegistrationTests_Username_Taken(string password, string user, string email, string hand)
         {
             Init(Constants.Path.Register, Method.POST);
@@ -155,7 +144,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.TakenEmail))]
-        [Order(1)]
         public void RegistrationTests_Email_Taken(string password, string user, string email, string hand)
         {
             Init(Constants.Path.Register, Method.POST);
@@ -169,7 +157,6 @@ namespace RESTTest.Registration
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.CorrectInformation))]
-        [Order(1)]
         public void RegistrationTests_Should_Register(string password, string user, string email, string hand)
         {
             Init(Constants.Path.Register, Method.POST);
@@ -180,18 +167,48 @@ namespace RESTTest.Registration
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             StringAssert.Contains("records", json.ToString());
-            PlayerID = json["records"].ToString();
+            PlayerGenerator.DeletePlayer(client, json["records"].ToString());
         }
 
-        [Test]
-        [Order(2)]
-        public void RegistrationTests_Should_Delete()
+        [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.CorrectInformation))]
+        public void RegistrationTests_Should_Delete(string password, string user, string email, string hand)
         {
-            Init(Constants.Path.User + $"/{PlayerID}", Method.DELETE);
+            Init(Constants.Path.Register, Method.POST);
+            request.AddJsonBody(new RegisterAccountRequest(password, user, email, hand));
 
             IRestResponse response = client.Execute(request);
+            JObject json = JObject.Parse(response.Content);
+
+            Init(Constants.Path.User + $"/{json["records"]}", Method.DELETE);
+
+            response = client.Execute(request);
+            while (response.StatusCode != HttpStatusCode.OK) response = client.Execute(request);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.WrongId))]
+        public void RegistrationTests_Delete_Wrong_Id(string id)
+        {
+            Init(Constants.Path.User + $"/{id}", Method.DELETE);
+
+            IRestResponse response = client.Execute(request);
+            JObject json = JObject.Parse(response.Content);
+
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+            StringAssert.Contains("user cannot be found by id", json["errors"].First.ToString());
+        }
+
+        [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.IncorrectId))]
+        public void RegistrationTests_Delete_Incorrect_Id(string id)
+        {
+            Init(Constants.Path.User + $"/{id}", Method.DELETE);
+
+            IRestResponse response = client.Execute(request);
+            JObject json = JObject.Parse(response.Content);
+
+            Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+            StringAssert.Contains("not valid", json["errors"]["userId"].First.ToString());
         }
     }
 }

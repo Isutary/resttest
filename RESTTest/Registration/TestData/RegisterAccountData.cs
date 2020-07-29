@@ -57,5 +57,13 @@ namespace RESTTest.Registration.TestData
                 Constants.Data.RegisterAccount.Hand
             }
         };
+
+        public static string[] WrongId = { 
+            Constants.Data.RegisterAccount.WrongId
+        };
+
+        public static string[] IncorrectId = {
+            Constants.Data.RegisterAccount.IncorrectId
+        };
     }
 }

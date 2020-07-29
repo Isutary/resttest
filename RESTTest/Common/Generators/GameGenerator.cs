@@ -12,8 +12,12 @@ namespace RESTTest.Common.Generators
     {
         public static string Id { get; set; }
 
-        public static void CreateGame(RestClient client, RestRequest request, string code)
+        public static void CreateGame(RestClient client, string code)
         {
+            RestRequest request = new RestRequest(Game.Constants.Path.Game, Method.POST);
+            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
+            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+
             string open = DateTime.Now.AddMinutes(3).ToString(CommonConstants.Time.Format);
             string end = DateTime.Now.AddMinutes(6).ToString(CommonConstants.Time.Format);
             request.AddJsonBody(new AddGameRequest(
@@ -33,7 +37,6 @@ namespace RESTTest.Common.Generators
         public static string GetGameId(RestClient client, string code)
         {
             RestRequest request = new RestRequest(Game.Constants.Path.Game, Method.GET);
-
             request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
             request.AddHeader("Authorization", AuthenticationSetupFixture.token);
 
@@ -52,8 +55,12 @@ namespace RESTTest.Common.Generators
                 .ToString();
         }
 
-        public static void DeleteGame(RestClient client, RestRequest request)
+        public static void DeleteGame(RestClient client, string id)
         {
+            RestRequest request = new RestRequest(Game.Constants.Path.Game + $"/{id}", Method.DELETE);
+            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
+            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+
             client.Execute(request);
         }
     }

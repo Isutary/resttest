@@ -139,7 +139,6 @@ namespace RESTTest.Game
         }
 
         [TestCaseSource(typeof(GameData), nameof(GameData.CorrectInformation))]
-        [Order(1)]
         public void GameTests_Should_Create_Game(string code, string first, string consolation, string recurring, string pattern)
         {
             Init(Constants.Path.Game, Method.POST);
@@ -151,13 +150,10 @@ namespace RESTTest.Game
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            string id = GameGenerator.GetGameId(client, code);
-            Init(Constants.Path.Game + $"/{id}", Method.DELETE);
-            GameGenerator.DeleteGame(client, request);
+            GameGenerator.DeleteGame(client, GameGenerator.GetGameId(client, code));
         }
 
         [Test]
-        [Order(2)]
         public void GameTests_GetGameById()
         {
             Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.GET);
@@ -170,7 +166,6 @@ namespace RESTTest.Game
         }
 
         [TestCaseSource(typeof(UpdateData), nameof(UpdateData.EmptyFirstPrize))]
-        [Order(2)]
         public void GameTests_Empty_First_Prize(string first, string consolation, string recurring, string pattern)
         {
             Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.PUT);
@@ -186,7 +181,6 @@ namespace RESTTest.Game
         }
 
         [TestCaseSource(typeof(UpdateData), nameof(UpdateData.EmptyConsolationPrize))]
-        [Order(2)]
         public void GameTests_Empty_Consolation_Prize(string first, string consolation, string recurring, string pattern)
         {
             Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.PUT);
@@ -202,7 +196,6 @@ namespace RESTTest.Game
         }
 
         [TestCaseSource(typeof(UpdateData), nameof(UpdateData.CorrectInformation))]
-        [Order(2)]
         public void GameTests_Game_Should_Update(string first, string consolation, string recurring, string pattern)
         {
             Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.PUT);
@@ -215,11 +208,17 @@ namespace RESTTest.Game
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
-        [Test]
-        [Order(3)]
-        public void GameTests_Delete_Should_Work()
+        [TestCaseSource(typeof(GameData), nameof(GameData.CorrectInformation))]
+        public void GameTests_Delete_Should_Work(string code, string first, string consolation, string recurring, string pattern)
         {
-            Init(Constants.Path.Game + $"/{GameGenerator.Id}", Method.DELETE);
+            Init(Constants.Path.Game, Method.POST);
+            string open = DateTime.Now.AddMinutes(3).ToString(CommonConstants.Time.Format);
+            string end = DateTime.Now.AddMinutes(6).ToString(CommonConstants.Time.Format);
+            request.AddJsonBody(new AddGameRequest(code, first, consolation, open, end, recurring, pattern));
+
+            client.Execute(request);
+
+            Init(Constants.Path.Game + $"/{GameGenerator.GetGameId(client, code)}", Method.DELETE);
 
             IRestResponse response = client.Execute(request);
 

@@ -3,23 +3,23 @@ using RESTTest.Common.Generators;
 using RESTTest.Common.Setup;
 using CommonConstants = RESTTest.Common.Constants;
 
-namespace RESTTest.Game
+namespace RESTTest.Registration
 {
     [SetUpFixture]
-    public class GameTestsFixture : HeaderSetupFixture
+    public class RegistrationTestsFixture : HeaderSetupFixture
     {
-        public GameTestsFixture() : base(CommonConstants.Host.GameService) { }
+        public RegistrationTestsFixture() : base(CommonConstants.Host.IdentityService) { }
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            GameGenerator.CreateGame(client, Constants.Data.Game.TestGameCode);
+            PlayerGenerator.CreatePlayer(client);
         }
 
         [OneTimeTearDown]
         public void TearDown()
         {
-            GameGenerator.DeleteGame(client, GameGenerator.Id);
+            PlayerGenerator.DeletePlayer(client, PlayerGenerator.Id);
         }
     }
 }

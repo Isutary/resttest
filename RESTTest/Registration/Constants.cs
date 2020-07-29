@@ -36,6 +36,10 @@
                 public const string CorrectPassword = "Plavi.12.";
                 public const string CorrectUsername = "AlsoAmazinglyRandomName";
                 public const string TakenUsername = "Salt";
+                public const string WrongId = "62381f1d-ab00-4c69-940f-c7c7305f8847";
+                public const string IncorrectId = "a";
+                public const string TestUsername = "RandomLikeYouWouldntBelie";
+                public const string TestEmail = "RandomLikeYouWouldntBelieve@randomness.com";
             }
 
             public static class UsernameSearch
