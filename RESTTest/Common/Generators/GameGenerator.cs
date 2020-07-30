@@ -74,7 +74,7 @@ namespace RESTTest.Common.Generators
 
         public static void DeleteAll()
         {
-            Parallel.ForEach(Games, game => DeleteGame(game));
+            foreach (string game in Games) DeleteGame(game);
             DeleteGame(Id);
         }
     }

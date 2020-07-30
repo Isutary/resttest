@@ -35,6 +35,8 @@
                 public const string TakenEmail = "salt@test.com";
                 public const string CorrectPassword = "Plavi.12.";
                 public const string CorrectUsername = "AlsoAmazinglyRandomName";
+                public const string DeleteUsername = "RandomDelete";
+                public const string DeleteEmail = "RandomDelete@random.com";
                 public const string TakenUsername = "Salt";
                 public const string WrongId = "62381f1d-ab00-4c69-940f-c7c7305f8847";
                 public const string IncorrectId = "a";
