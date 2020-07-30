@@ -9,11 +9,11 @@ namespace RESTTest.Leaderboard.TestData
         };
 
         public static string[] IncorrectPin = {
-            Constants.Data.Leaderboard.IncorrectPin
+            Constants.Data.Subscribe.IncorrectPin
         };
 
         public static string[] AlreadySubscribed = { 
-            Constants.Data.Leaderboard.TestLeaderboardPin
+            Constants.Data.Subscribe.TestLeaderboardPin
         };
     }
 }

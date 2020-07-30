@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
+using RESTTest.Common.Generators;
 using RESTTest.Common.Setup;
+using RESTTest.Leaderboard.Helper;
 using RESTTest.Leaderboard.Requests;
 using RESTTest.Leaderboard.TestData;
+using System.Globalization;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
 namespace RESTTest.Leaderboard
@@ -25,6 +28,9 @@ namespace RESTTest.Leaderboard
             StringAssert.AreEqualIgnoringCase(name, json["records"]["name"].ToString());
             StringAssert.AreEqualIgnoringCase("Custom", json["records"]["type"].ToString());
             StringAssert.AreEqualIgnoringCase("2d84c01d-5885-4c51-91a0-045ef918d429", json["records"]["createdById"].ToString());
+
+            string id = json["records"]["id"].ToString();
+            LeaderboardGenerator.DeleteLeaderboard(id);
         }
 
         [TestCaseSource(typeof(LeaderboardData), nameof(LeaderboardData.EmptyName))]
@@ -90,6 +96,34 @@ namespace RESTTest.Leaderboard
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
             StringAssert.Contains("already subscribed to leaderboard", json["message"].ToString());
+        }
+
+        [TestCaseSource(typeof(UpdateGlobalPrizeData), nameof(UpdateGlobalPrizeData.EmptyPrize))]
+        public void LeaderboardTests_Prize_Cannot_Be_Emtpy(string currentId, string current, string futureId, string future)
+        {
+            Init(Constants.Path.GlobalPrize, Method.PUT);
+            request.AddJsonBody(new UpdateGlobalPrizeRequest(currentId, current, futureId, future));
+
+            IRestResponse response = client.Execute(request);
+            JObject json = JObject.Parse(response.Content);
+
+            Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode);
+            StringAssert.Contains("leaderboard prize cannot be null or empty", json["message"].ToString());
+        }
+
+        [TestCaseSource(typeof(UpdateGlobalPrizeData), nameof(UpdateGlobalPrizeData.CorrectPrize))]
+        public void LeaderboardTests_Prize_Should_Change(string current, string future)
+        {
+            Init(Constants.Path.GlobalPrize, Method.PUT);
+            string CurrentId = Extractor.CurrentPrizeId;
+            string FutureId = Extractor.FuturePrizeId;
+            request.AddJsonBody(new UpdateGlobalPrizeRequest(CurrentId, current, FutureId, future));
+
+            IRestResponse response = client.Execute(request);
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+
+            Extractor.Revert();
         }
     }
 }

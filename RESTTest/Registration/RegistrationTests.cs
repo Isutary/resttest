@@ -179,7 +179,6 @@ namespace RESTTest.Registration
             Init(Constants.Path.User + $"/{id}", Method.DELETE);
 
             IRestResponse response = client.Execute(request);
-            while (response.StatusCode != HttpStatusCode.OK) response = client.Execute(request);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }

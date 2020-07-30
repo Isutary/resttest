@@ -27,8 +27,18 @@ namespace RESTTest.Leaderboard
                 public const string LongName = "aaaaaaaaaaaaaaaaaaaa";
                 public const string CorrectName = "Temp";
                 public const string TestLeaderboardName = "LeaderboardTest";
+            }
+
+            public static class Subscribe
+            {
                 public const string IncorrectPin = "AAAAAA";
                 public const string TestLeaderboardPin = "L3E95C";
+            }
+
+            public static class GlobalPrize
+            {
+                public const string IncorrectPrizeId = "2CC641A7-1057-4E28-82AD-D5C4C8F06164";
+                public const string Prize = "Rest test prize";
             }
         }
     }
