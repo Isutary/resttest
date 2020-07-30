@@ -9,6 +9,7 @@
             public const string SupportingService = "https://supporting-service.dev.rps-live.applicita.com";
             public const string IdentityService = "https://identity-service.dev.rps-live.applicita.com";
             public const string GameService = "https://game-service.dev.rps-live.applicita.com";
+            public const string LeaderboardService = "https://leaderboard-service.dev.rps-live.applicita.com";
         }
 
         public static class Time
