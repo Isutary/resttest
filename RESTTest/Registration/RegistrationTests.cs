@@ -5,6 +5,7 @@ using RESTTest.Common.Generators;
 using RESTTest.Common.Setup;
 using RESTTest.Registration.Requests;
 using RESTTest.Registration.TestData;
+using System.Collections.Generic;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
 
@@ -167,21 +168,17 @@ namespace RESTTest.Registration
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             StringAssert.Contains("records", json.ToString());
-            PlayerGenerator.DeletePlayer(client, json["records"].ToString());
+            PlayerGenerator.DeletePlayer(json["records"].ToString());
         }
 
-        [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.CorrectInformation))]
-        public void RegistrationTests_Should_Delete(string password, string user, string email, string hand)
+        [TestCase(Constants.Data.RegisterAccount.CorrectUsername, Constants.Data.RegisterAccount.CorrectEmail)]
+        public void RegistrationTests_Should_Delete(string user, string email)
         {
-            Init(Constants.Path.Register, Method.POST);
-            request.AddJsonBody(new RegisterAccountRequest(password, user, email, hand));
+            string id = PlayerGenerator.CreatePlayer(user, email, false);
+
+            Init(Constants.Path.User + $"/{id}", Method.DELETE);
 
             IRestResponse response = client.Execute(request);
-            JObject json = JObject.Parse(response.Content);
-
-            Init(Constants.Path.User + $"/{json["records"]}", Method.DELETE);
-
-            response = client.Execute(request);
             while (response.StatusCode != HttpStatusCode.OK) response = client.Execute(request);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);

@@ -13,13 +13,13 @@ namespace RESTTest.Registration
         [OneTimeSetUp]
         public void SetUp()
         {
-            PlayerGenerator.CreatePlayer(client);
+            PlayerGenerator.CreatePlayer(Constants.Data.RegisterAccount.TestUsername, Constants.Data.RegisterAccount.TestEmail);
         }
 
         [OneTimeTearDown]
         public void TearDown()
         {
-            PlayerGenerator.DeletePlayer(client, PlayerGenerator.Id);
+            PlayerGenerator.DeleteAll();
         }
     }
 }

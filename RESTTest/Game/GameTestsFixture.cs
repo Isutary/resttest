@@ -13,13 +13,13 @@ namespace RESTTest.Game
         [OneTimeSetUp]
         public void SetUp()
         {
-            GameGenerator.CreateGame(client, Constants.Data.Game.TestGameCode);
+            GameGenerator.CreateGame(Constants.Data.Game.TestGameCode);
         }
 
         [OneTimeTearDown]
         public void TearDown()
         {
-            GameGenerator.DeleteGame(client, GameGenerator.Id);
+            GameGenerator.DeleteAll();
         }
     }
 }

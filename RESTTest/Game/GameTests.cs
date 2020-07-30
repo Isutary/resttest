@@ -150,7 +150,7 @@ namespace RESTTest.Game
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
-            GameGenerator.DeleteGame(client, GameGenerator.GetGameId(client, code));
+            GameGenerator.DeleteGame(GameGenerator.GetGameId(code));
         }
 
         [Test]
@@ -208,17 +208,12 @@ namespace RESTTest.Game
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
 
-        [TestCaseSource(typeof(GameData), nameof(GameData.CorrectInformation))]
-        public void GameTests_Delete_Should_Work(string code, string first, string consolation, string recurring, string pattern)
+        [TestCase(Constants.Data.Game.CorrectCode)]
+        public void GameTests_Delete_Should_Work(string code)
         {
-            Init(Constants.Path.Game, Method.POST);
-            string open = DateTime.Now.AddMinutes(3).ToString(CommonConstants.Time.Format);
-            string end = DateTime.Now.AddMinutes(6).ToString(CommonConstants.Time.Format);
-            request.AddJsonBody(new AddGameRequest(code, first, consolation, open, end, recurring, pattern));
+            GameGenerator.CreateGame(code, false);
 
-            client.Execute(request);
-
-            Init(Constants.Path.Game + $"/{GameGenerator.GetGameId(client, code)}", Method.DELETE);
+            Init(Constants.Path.Game + $"/{GameGenerator.GetGameId(code)}", Method.DELETE);
 
             IRestResponse response = client.Execute(request);
 

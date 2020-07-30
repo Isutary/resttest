@@ -3,16 +3,22 @@ using RestSharp;
 using RESTTest.Common.Setup;
 using RESTTest.Game.Requests;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CommonConstants = RESTTest.Common.Constants;
 
 namespace RESTTest.Common.Generators
 {
     public static class GameGenerator
     {
-        public static string Id { get; set; }
+        private readonly static RestClient client = new RestClient(CommonConstants.Host.GameService);
 
-        public static void CreateGame(RestClient client, string code)
+        private static List<string> Games { get; } = new List<string>();
+
+        public static string Id { get; private set; }
+
+        public static void CreateGame(string code, bool isTest = true)
         {
             RestRequest request = new RestRequest(Game.Constants.Path.Game, Method.POST);
             request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
@@ -21,7 +27,7 @@ namespace RESTTest.Common.Generators
             string open = DateTime.Now.AddMinutes(3).ToString(CommonConstants.Time.Format);
             string end = DateTime.Now.AddMinutes(6).ToString(CommonConstants.Time.Format);
             request.AddJsonBody(new AddGameRequest(
-                Game.Constants.Data.Game.TestGameCode,
+                code,
                 Game.Constants.Data.Game.Prize,
                 Game.Constants.Data.Game.Prize,
                 open,
@@ -31,10 +37,12 @@ namespace RESTTest.Common.Generators
             ));
 
             client.Execute(request);
-            Id = GetGameId(client, code);
+            string id = GetGameId(code);
+            if (isTest) Id = id;
+            else Games.Add(id);
         }
 
-        public static string GetGameId(RestClient client, string code)
+        public static string GetGameId(string code)
         {
             RestRequest request = new RestRequest(Game.Constants.Path.Game, Method.GET);
             request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
@@ -55,13 +63,19 @@ namespace RESTTest.Common.Generators
                 .ToString();
         }
 
-        public static void DeleteGame(RestClient client, string id)
+        public static void DeleteGame(string id)
         {
             RestRequest request = new RestRequest(Game.Constants.Path.Game + $"/{id}", Method.DELETE);
             request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
             request.AddHeader("Authorization", AuthenticationSetupFixture.token);
 
             client.Execute(request);
+        }
+
+        public static void DeleteAll()
+        {
+            Parallel.ForEach(Games, game => DeleteGame(game));
+            DeleteGame(Id);
         }
     }
 }
