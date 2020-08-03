@@ -20,5 +20,18 @@ namespace RESTTest.Supporting
                 public const string Incorrect = "0";
             }
         }
+
+        public static class Response
+        {
+            public const string Id = "id";
+            public const string MustBeValid = "must be valid version number";
+        }
+
+        public static class Name
+        {
+            public const string AMACV = "androidMinimumAllowedClientVersion";
+            public const string IMACV = "iosMinimumAllowedClientVersion";
+            public const string IIMM = "isInMaintenanceMode";
+        }
     }
 }

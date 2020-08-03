@@ -12,6 +12,27 @@
             public const string LeaderboardService = "https://leaderboard-service.dev.rps-live.applicita.com";
         }
 
+        public static class Name
+        {
+            public const string Errors = "errors";
+            public const string Records = "records";
+            public const string Message = "message";
+        }
+
+        public static class Response
+        {
+            public const string False = "false";
+            public const string True = "true";
+        }
+
+        public static class Query
+        {
+            public const string To = "to";
+            public const string From = "from";
+            public const string Page = "page";
+            public const string PageSize = "pageSize";
+        }
+
         public static class Time
         {
             public const string Format = "yyyy-MM-ddTHH:mm:ssZ";

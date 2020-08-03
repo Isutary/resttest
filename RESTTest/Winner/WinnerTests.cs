@@ -7,8 +7,8 @@ using RESTTest.Winner.TestData;
 using System;
 using System.Linq;
 using System.Net;
-using PrizeData = RESTTest.Prize.Constants.Data.Claim;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
 
 namespace RESTTest.Winner
 {
@@ -36,33 +36,33 @@ namespace RESTTest.Winner
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(PrizeData.Username, json["records"]["firstName"].ToString());
-            StringAssert.AreEqualIgnoringCase(PrizeData.Email, json["records"]["paypalAddress"].ToString());
-            StringAssert.AreEqualIgnoringCase(PrizeData.Phone, json["records"]["phoneNumber"].ToString());
-            StringAssert.AreEqualIgnoringCase(PrizeData.Username, json["records"]["userName"].ToString());
-            StringAssert.AreEqualIgnoringCase(PrizeData.CorrectId, json["records"]["claimRequestId"].ToString());
-            StringAssert.AreEqualIgnoringCase("1st", json["records"]["prizePosition"].ToString());
-            StringAssert.AreEqualIgnoringCase("RESTTest Prize", json["records"]["prizeDescription"].ToString());
-            StringAssert.AreEqualIgnoringCase("Not claimed", json["records"]["status"].ToString());
-            StringAssert.AreEqualIgnoringCase("Game prize", json["records"]["prizeType"].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Username, json[CommonName.Records][Constants.Name.FirstName].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Email, json[CommonName.Records][Constants.Name.Paypal].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Phone, json[CommonName.Records][Constants.Name.Phone].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Username, json[CommonName.Records][Constants.Name.Username].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.CorrectId, json[CommonName.Records][Constants.Name.ClaimId].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Position, json[CommonName.Records][Constants.Name.Position].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Prize, json[CommonName.Records][Constants.Name.Description].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Status, json[CommonName.Records][Constants.Name.Status].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Type, json[CommonName.Records][Constants.Name.Type].ToString());
         }
 
         [Test]
         public void WinnerTests_GetWinners()
         {
             Init(Constants.Path.Winner, Method.GET);
-            request.AddParameter("from", DateTime.Now.AddMonths(-1).ToString(CommonConstants.Time.Format));
-            request.AddParameter("to", DateTime.Now.AddMonths(1).ToString(CommonConstants.Time.Format));
-            request.AddParameter("page", Constants.Query.Page);
-            request.AddParameter("pageSize", Constants.Query.PageSize);
+            request.AddParameter(CommonConstants.Query.From, DateTime.Now.AddMonths(-1).ToString(CommonConstants.Time.Format));
+            request.AddParameter(CommonConstants.Query.To, DateTime.Now.AddMonths(1).ToString(CommonConstants.Time.Format));
+            request.AddParameter(CommonConstants.Query.Page, Constants.Query.Page);
+            request.AddParameter(CommonConstants.Query.PageSize, Constants.Query.PageSize);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json["records"].Count().ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Query.Page, json["paginationInfo"]["page"].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json["paginationInfo"]["pageSize"].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json[CommonName.Records].Count().ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Query.Page, json[Constants.Name.Info][CommonConstants.Query.Page].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json[Constants.Name.Info][CommonConstants.Query.PageSize].ToString());
         }
     }
 }

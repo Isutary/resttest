@@ -6,6 +6,7 @@ using RESTTest.Supporting.Requests;
 using RESTTest.Supporting.TestData;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
 
 namespace RESTTest.Supporting
 {
@@ -22,10 +23,10 @@ namespace RESTTest.Supporting
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(amacv, json["records"]["androidMinimumAllowedClientVersion"].ToString());
-            StringAssert.AreEqualIgnoringCase(imacv, json["records"]["iosMinimumAllowedClientVersion"].ToString());
-            StringAssert.AreEqualIgnoringCase(iimm, json["records"]["isInMaintenanceMode"].ToString());
-            StringAssert.Contains("id", response.Content);
+            StringAssert.AreEqualIgnoringCase(amacv, json[CommonName.Records][Constants.Name.AMACV].ToString());
+            StringAssert.AreEqualIgnoringCase(imacv, json[CommonName.Records][Constants.Name.IMACV].ToString());
+            StringAssert.AreEqualIgnoringCase(iimm, json[CommonName.Records][Constants.Name.IIMM].ToString());
+            StringAssert.Contains(Constants.Response.Id, response.Content);
         }
 
         [TestCaseSource(typeof(ClientInfoData), nameof(ClientInfoData.CorrectSettings))]
@@ -49,8 +50,8 @@ namespace RESTTest.Supporting
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must be valid version number", json["errors"]["iosMinimumAllowedClientVersion"].First.ToString());
-            StringAssert.Contains("must be valid version number", json["errors"]["androidMinimumAllowedClientVersion"].First.ToString());
+            StringAssert.Contains(Constants.Response.MustBeValid, json[CommonName.Errors][Constants.Name.IMACV].First.ToString());
+            StringAssert.Contains(Constants.Response.MustBeValid, json[CommonName.Errors][Constants.Name.AMACV].First.ToString());
         }
     }
 }

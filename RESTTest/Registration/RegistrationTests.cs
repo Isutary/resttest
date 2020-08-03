@@ -5,9 +5,10 @@ using RESTTest.Common.Generators;
 using RESTTest.Common.Setup;
 using RESTTest.Registration.Requests;
 using RESTTest.Registration.TestData;
-using System.Collections.Generic;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
+using CommonResponse = RESTTest.Common.Constants.Response;
 
 namespace RESTTest.Registration
 {
@@ -34,7 +35,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("does not exist and cannot be cast", json["message"].ToString());
+            StringAssert.Contains("does not exist and cannot be cast", json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(PlayerAccountSearchData), nameof(PlayerAccountSearchData.IncorrectAccount))]
@@ -47,7 +48,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase("false", json["records"]["isAlreadyExisting"].ToString());
+            StringAssert.AreEqualIgnoringCase(CommonResponse.False, json[CommonName.Records]["isAlreadyExisting"].ToString());
         }
 
         [TestCaseSource(typeof(PlayerAccountSearchData), nameof(PlayerAccountSearchData.CorrectAccount))]
@@ -60,7 +61,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase("true", json["records"]["isAlreadyExisting"].ToString());
+            StringAssert.AreEqualIgnoringCase(CommonResponse.True, json[CommonName.Records]["isAlreadyExisting"].ToString());
         }
 
         [TestCaseSource(typeof(UsernameSearchData), nameof(UsernameSearchData.IncorrectUsername))]
@@ -73,7 +74,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase("false", json["records"]["isAlreadyExisting"].ToString());
+            StringAssert.AreEqualIgnoringCase(CommonResponse.False, json[CommonName.Records]["isAlreadyExisting"].ToString());
         }
 
         [TestCaseSource(typeof(UsernameSearchData), nameof(UsernameSearchData.CorrectUsername))]
@@ -86,7 +87,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase("true", json["records"]["isAlreadyExisting"].ToString());
+            StringAssert.AreEqualIgnoringCase(CommonResponse.True, json[CommonName.Records]["isAlreadyExisting"].ToString());
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.EmptyInformation))]
@@ -99,9 +100,9 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("'Email' must not be empty", json["errors"]["email"].First.ToString());
-            StringAssert.Contains("'Password' must not be empty", json["errors"]["password"].First.ToString());
-            StringAssert.Contains("'Username' must not be empty", json["errors"]["username"].First.ToString());
+            StringAssert.Contains("must not be empty", json[CommonName.Errors]["email"].First.ToString());
+            StringAssert.Contains("must not be empty", json[CommonName.Errors]["password"].First.ToString());
+            StringAssert.Contains("must not be empty", json[CommonName.Errors]["username"].First.ToString());
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.NotLongEnough))]
@@ -114,8 +115,8 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must be at least 6 characters", json["errors"]["password"].First.ToString());
-            StringAssert.Contains("must be between 3 and 25 characters", json["errors"]["username"].First.ToString());
+            StringAssert.Contains("must be at least 6 characters", json[CommonName.Errors]["password"].First.ToString());
+            StringAssert.Contains("must be between 3 and 25 characters", json[CommonName.Errors]["username"].First.ToString());
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.IncorrectEmail))]
@@ -128,7 +129,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("'Email' is not a valid email address", json["errors"]["email"].First.ToString());
+            StringAssert.Contains("'Email' is not a valid email address", json[CommonName.Errors]["email"].First.ToString());
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.TakenUsername))]
@@ -141,7 +142,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("is already taken", json["errors"].First.ToString());
+            StringAssert.Contains("is already taken", json[CommonName.Errors].First.ToString());
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.TakenEmail))]
@@ -154,7 +155,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("is already taken", json["errors"].First.ToString());
+            StringAssert.Contains("is already taken", json[CommonName.Errors].First.ToString());
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.CorrectInformation))]
@@ -168,7 +169,7 @@ namespace RESTTest.Registration
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             StringAssert.Contains("records", json.ToString());
-            PlayerGenerator.DeletePlayer(json["records"].ToString());
+            PlayerGenerator.DeletePlayer(json[CommonName.Records].ToString());
         }
 
         [TestCase(Constants.Data.RegisterAccount.CorrectUsername, Constants.Data.RegisterAccount.CorrectEmail)]
@@ -192,7 +193,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
-            StringAssert.Contains("user cannot be found by id", json["errors"].First.ToString());
+            StringAssert.Contains("user cannot be found by id", json[CommonName.Errors].First.ToString());
         }
 
         [TestCaseSource(typeof(RegisterAccountData), nameof(RegisterAccountData.IncorrectId))]
@@ -204,7 +205,7 @@ namespace RESTTest.Registration
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("not valid", json["errors"]["userId"].First.ToString());
+            StringAssert.Contains("not valid", json[CommonName.Errors]["userId"].First.ToString());
         }
     }
 }
