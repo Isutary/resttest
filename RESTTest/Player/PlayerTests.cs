@@ -6,6 +6,8 @@ using RESTTest.Player.Requests;
 using RESTTest.Player.TestData;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
+using CommonResponse = RESTTest.Common.Constants.Response;
 
 namespace RESTTest.Player
 {
@@ -23,7 +25,7 @@ namespace RESTTest.Player
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("Only increasing the number golden lives is permitted", json["message"].ToString());
+            StringAssert.Contains(Constants.Response.GoldenLivesRule, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(SettingsData), nameof(SettingsData.IncorrectColor))]
@@ -36,7 +38,7 @@ namespace RESTTest.Player
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode);
-            StringAssert.Contains("hand color does not exist, and cannot be cast", json["message"].ToString());
+            StringAssert.Contains(CommonResponse.NotExist, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(SettingsData), nameof(SettingsData.CorrectColor))]

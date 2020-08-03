@@ -27,20 +27,6 @@ namespace RESTTest.Winner
             }
         }
 
-        public static class Name
-        {
-            public const string FirstName = "firstName";
-            public const string Paypal = "paypalAddress";
-            public const string Phone = "phoneNumber";
-            public const string Username = "userName";
-            public const string ClaimId = "claimRequestId";
-            public const string Position = "prizePosition";
-            public const string Description = "prizeDescription";
-            public const string Status = "status";
-            public const string Type = "prizeType";
-            public const string Info = "paginationInfo";
-        }
-
         public static class Response
         {
             public const string Username = "Salt";
@@ -53,6 +39,8 @@ namespace RESTTest.Winner
             public const string Status = "Not claimed";
             public const string Prize = "RESTTest Prize";
             public const string Type = "Game prize";
+            public const string Page = Query.Page;
+            public const string PageSize = Query.PageSize;
         }
     }
 }

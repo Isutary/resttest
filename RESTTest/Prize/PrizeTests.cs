@@ -8,6 +8,8 @@ using RESTTest.Winner;
 using System.Linq;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
+using CommonResponse = RESTTest.Common.Constants.Response;
 
 namespace RESTTest.Prize
 {
@@ -24,14 +26,14 @@ namespace RESTTest.Prize
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.Contains("status", json["records"].First().ToString());
-            StringAssert.Contains("awardedAt", json["records"].First().ToString());
-            StringAssert.Contains("prizePosition", json["records"].First().ToString());
-            StringAssert.Contains("prizeType", json["records"].First().ToString());
-            StringAssert.Contains("playerId", json["records"].First().ToString());
-            StringAssert.Contains("hostId", json["records"].First().ToString());
-            StringAssert.Contains("prizeDescription", json["records"].First().ToString());
-            StringAssert.Contains("id", json["records"].First().ToString());
+            StringAssert.Contains(CommonName.Status, json[CommonName.Records].First().ToString());
+            StringAssert.Contains(CommonName.AwardedAt, json[CommonName.Records].First().ToString());
+            StringAssert.Contains(CommonName.Position, json[CommonName.Records].First().ToString());
+            StringAssert.Contains(CommonName.Type, json[CommonName.Records].First().ToString());
+            StringAssert.Contains(CommonName.PlayerId, json[CommonName.Records].First().ToString());
+            StringAssert.Contains(CommonName.HostId, json[CommonName.Records].First().ToString());
+            StringAssert.Contains(CommonName.Description, json[CommonName.Records].First().ToString());
+            StringAssert.Contains(CommonName.Id, json[CommonName.Records].First().ToString());
         }
 
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.AlreadyClaimed))]
@@ -44,7 +46,7 @@ namespace RESTTest.Prize
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("Claim request can not be updated for already claimed prizes", json["message"].ToString());
+            StringAssert.Contains(Constants.Response.AlreadyClaimed, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.EmptyClaim))]
@@ -57,8 +59,8 @@ namespace RESTTest.Prize
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must not be empty", json["errors"]["firstName"].First().ToString());
-            StringAssert.Contains("must not be empty", json["errors"]["paypalAddress"].First().ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][CommonName.FirstName].First().ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][CommonName.Paypal].First().ToString());
         }
 
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.CorrectClaim))]
@@ -71,10 +73,10 @@ namespace RESTTest.Prize
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase("Pending", json["records"]["status"].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Status, json[CommonName.Records][CommonName.Status].ToString());
 
             WinnerTests winnerTests = new WinnerTests();
-            winnerTests.WinnerTests_Should_Change("Not claimed");
+            winnerTests.WinnerTests_Should_Change(Winner.Constants.Data.Claim.NotClaimed);
         }
 
         [TestCaseSource(typeof(ClaimData), nameof(ClaimData.IncorrectClaim))]
@@ -87,7 +89,7 @@ namespace RESTTest.Prize
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode);
-            StringAssert.Contains("does not exists as winner for game Id", json["message"].ToString());
+            StringAssert.Contains(CommonResponse.NotExist, json[CommonName.Message].ToString());
         }
     }
 }

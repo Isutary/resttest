@@ -6,9 +6,11 @@ using RESTTest.Common.Setup;
 using RESTTest.Leaderboard.Helper;
 using RESTTest.Leaderboard.Requests;
 using RESTTest.Leaderboard.TestData;
-using System.Globalization;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
+using CommonResponse = RESTTest.Common.Constants.Response;
+
 namespace RESTTest.Leaderboard
 {
     public class LeaderboardTests : HeaderSetupFixture
@@ -25,11 +27,11 @@ namespace RESTTest.Leaderboard
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(name, json["records"]["name"].ToString());
-            StringAssert.AreEqualIgnoringCase("Custom", json["records"]["type"].ToString());
-            StringAssert.AreEqualIgnoringCase("2d84c01d-5885-4c51-91a0-045ef918d429", json["records"]["createdById"].ToString());
+            StringAssert.AreEqualIgnoringCase(name, json[CommonName.Records][Constants.Name.LeaderboardName].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Type, json[CommonName.Records][Constants.Name.LeaderboardName].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.CreatedById, json[CommonName.Records][Constants.Name.LeaderboardName].ToString());
 
-            string id = json["records"]["id"].ToString();
+            string id = json[CommonName.Records][CommonName.Id].ToString();
             LeaderboardGenerator.DeleteLeaderboard(id);
         }
 
@@ -43,7 +45,7 @@ namespace RESTTest.Leaderboard
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must not be empty", json["errors"]["name"].First.ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][Constants.Name.LeaderboardName].First.ToString());
         }
 
         [TestCaseSource(typeof(LeaderboardData), nameof(LeaderboardData.LongName))]
@@ -56,7 +58,7 @@ namespace RESTTest.Leaderboard
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must be 18 characters or fewer", json["errors"]["name"].First.ToString());
+            StringAssert.Contains(Constants.Response.TooLong, json[CommonName.Errors][Constants.Name.LeaderboardName].First.ToString());
         }
 
         [TestCaseSource(typeof(SubscribeData), nameof(SubscribeData.EmtpyPin))]
@@ -69,7 +71,7 @@ namespace RESTTest.Leaderboard
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode);
-            StringAssert.Contains("cannot be null or empty and needs to be exactly 6 characters", json["message"].ToString());
+            StringAssert.Contains(CommonResponse.NotNullOrEmpty, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(SubscribeData), nameof(SubscribeData.IncorrectPin))]
@@ -82,7 +84,7 @@ namespace RESTTest.Leaderboard
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("not valid", json["message"].ToString());
+            StringAssert.Contains(CommonResponse.NotValid, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(SubscribeData), nameof(SubscribeData.AlreadySubscribed))]
@@ -95,7 +97,7 @@ namespace RESTTest.Leaderboard
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("already subscribed to leaderboard", json["message"].ToString());
+            StringAssert.Contains(Constants.Response.AlreadySubscribed, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(UpdateGlobalPrizeData), nameof(UpdateGlobalPrizeData.EmptyPrize))]
@@ -108,7 +110,7 @@ namespace RESTTest.Leaderboard
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode);
-            StringAssert.Contains("leaderboard prize cannot be null or empty", json["message"].ToString());
+            StringAssert.Contains(CommonResponse.NotNullOrEmpty, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(UpdateGlobalPrizeData), nameof(UpdateGlobalPrizeData.CorrectPrize))]

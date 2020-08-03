@@ -5,6 +5,8 @@ using RESTTest.Leaderboard.Requests;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
+using SetupName = RESTTest.Common.Constants.Setup.Name;
 
 namespace RESTTest.Common.Generators
 {
@@ -19,14 +21,14 @@ namespace RESTTest.Common.Generators
         public static string CreateLeaderboard(string name, bool isTest = true)
         {
             RestRequest request = new RestRequest(Leaderboard.Constants.Path.Leaderboard, Method.POST);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
             request.AddJsonBody(new CreateLeaderboardRequest(name));
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
             
-            string id = json["records"]["id"].ToString();
+            string id = json[CommonName.Records][CommonName.Id].ToString();
             if (isTest) Id = id;
             else Leaderboards.Add(id);
 
@@ -36,8 +38,8 @@ namespace RESTTest.Common.Generators
         public static void DeleteLeaderboard(string id)
         {
             RestRequest request = new RestRequest(Leaderboard.Constants.Path.Leaderboard + $"/{id}", Method.DELETE);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
 
             client.Execute(request);
         }

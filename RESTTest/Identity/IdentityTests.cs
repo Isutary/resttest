@@ -6,6 +6,8 @@ using RESTTest.Identity.Requests;
 using RESTTest.Identity.TestData;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
+using CommonResponse = RESTTest.Common.Constants.Response;
 
 namespace RESTTest.Identity
 {
@@ -23,7 +25,7 @@ namespace RESTTest.Identity
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("is already taken", json["errors"].First.ToString());
+            StringAssert.Contains(CommonResponse.IsTaken, json[CommonName.Errors].First.ToString());
         }
 
         [TestCaseSource(typeof(EmailData), nameof(EmailData.IncorrectEmail))]
@@ -36,7 +38,7 @@ namespace RESTTest.Identity
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("is not in the correct format", json["errors"]["email"].First.ToString());
+            StringAssert.Contains(Constants.Response.IncorrectFormat, json[CommonName.Errors][Constants.Name.Email].First.ToString());
         }
 
         [TestCaseSource(typeof(EmailData), nameof(EmailData.CorrectEmail))]
@@ -60,9 +62,9 @@ namespace RESTTest.Identity
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase("true", json["IsFailure"].ToString());
-            StringAssert.AreEqualIgnoringCase("false", json["IsSuccess"].ToString());
-            StringAssert.AreEqualIgnoringCase("Incorrect password.", json["Error"].ToString());
+            StringAssert.AreEqualIgnoringCase(CommonResponse.True, json[Constants.Name.Failure].ToString());
+            StringAssert.AreEqualIgnoringCase(CommonResponse.False, json[Constants.Name.Success].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.IncorrectPassword, json[Constants.Name.Error].ToString());
         }
 
         [TestCaseSource(typeof(PasswordData), nameof(PasswordData.IncorrectPasswordLength))]
@@ -75,7 +77,7 @@ namespace RESTTest.Identity
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must be at least 6 characters", json["errors"]["newPassword"].First.ToString());
+            StringAssert.Contains(CommonResponse.Length, json[CommonName.Errors][Constants.Name.NewPassword].First.ToString());
         }
 
         [TestCaseSource(typeof(PasswordData), nameof(PasswordData.IncorrectRepeatPassword))]
@@ -88,7 +90,7 @@ namespace RESTTest.Identity
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("'Repeat Password' must be equal to", json["errors"]["repeatPassword"].First.ToString());
+            StringAssert.Contains(Constants.Response.MustEqual, json[CommonName.Errors][Constants.Name.RepeatPassword].First.ToString());
         }
 
         [TestCaseSource(typeof(PasswordData), nameof(PasswordData.EmptyPassword))]
@@ -101,9 +103,9 @@ namespace RESTTest.Identity
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must not be empty", json["errors"]["newPassword"].First.ToString());
-            StringAssert.Contains("must not be empty", json["errors"]["repeatPassword"].First.ToString());
-            StringAssert.Contains("must not be empty", json["errors"]["currentPassword"].First.ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][Constants.Name.NewPassword].First.ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][Constants.Name.RepeatPassword].First.ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][Constants.Name.CurrentPassword].First.ToString());
         }
 
         [TestCaseSource(typeof(PasswordData), nameof(PasswordData.CorrectPassword))]
@@ -116,8 +118,8 @@ namespace RESTTest.Identity
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase("false", json["IsFailure"].ToString());
-            StringAssert.AreEqualIgnoringCase("true", json["IsSuccess"].ToString());
+            StringAssert.AreEqualIgnoringCase(CommonResponse.False, json[Constants.Name.Failure].ToString());
+            StringAssert.AreEqualIgnoringCase(CommonResponse.True, json[Constants.Name.Success].ToString());
         }
     }
 }

@@ -12,6 +12,12 @@
             public const string DefaultProfilePicture = User + "/profile-image/default/DefaultImage";
         }
 
+        public static class Query
+        {
+            public const string Email = "email";
+            public const string Username = "username";
+        }
+
         public static class Data
         {
             public static class DefaultImage
@@ -49,6 +55,22 @@
                 public const string Incorrect = "SoRandomImAmazed";
                 public const string Correct = "salt";
             }
+        }
+
+        public static class Name
+        {
+            public const string IsExisting = "isAlreadyExisting";
+            public const string Email = "email";
+            public const string Username = "username";
+            public const string Password = "password";
+            public const string UserId = "userId";
+        }
+
+        public static class Response
+        {
+            public const string Between = "must be between 3 and 25 characters";
+            public const string EmailNotValid = "not a valid email address";
+            public const string UserNotFound = "user cannot be found by id";
         }
     }
 }

@@ -9,6 +9,8 @@ using System;
 using System.Linq;
 using System.Net;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonResponse = RESTTest.Common.Constants.Response;
+using CommonName = RESTTest.Common.Constants.Name;
 
 namespace RESTTest.Game
 {
@@ -28,7 +30,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode);
-            StringAssert.Contains("code cannot be null or empty", json["message"].ToString());
+            StringAssert.Contains(CommonResponse.NotNullOrEmpty, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(GameData), nameof(GameData.EmptyFirstPrize))]
@@ -43,7 +45,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must not be empty", json["errors"]["firstPrize"].First.ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][Constants.Name.First].First.ToString());
         }
 
         [TestCaseSource(typeof(GameData), nameof(GameData.EmptyConsolationPrize))]
@@ -58,7 +60,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must not be empty", json["errors"]["consolationPrize"].First.ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][Constants.Name.Consolation].First.ToString());
         }
 
         [TestCaseSource(typeof(GameData), nameof(GameData.CorrectInformation))]
@@ -72,7 +74,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must be greater than", json["errors"]["endAt"].First.ToString());
+            StringAssert.Contains(Constants.Response.GreaterThan, json[CommonName.Errors][Constants.Name.EndAt].First.ToString());
         }
 
         [TestCaseSource(typeof(GameData), nameof(GameData.CorrectInformation))]
@@ -87,7 +89,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode);
-            StringAssert.Contains("StartAt and EndAt must be the same", json["message"].ToString());
+            StringAssert.Contains(Constants.Response.MustBeSame, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(GameData), nameof(GameData.IncorrectRecurring))]
@@ -102,7 +104,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.InternalServerError, response.StatusCode);
-            StringAssert.Contains("game recurring pattern does not exist", json["message"].ToString());
+            StringAssert.Contains(CommonResponse.NotExist, json[CommonName.Message].ToString());
         }
 
         [TestCaseSource(typeof(GameData), nameof(GameData.TakenGameCode))]
@@ -117,25 +119,25 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("already exits", json["message"].ToString());
+            StringAssert.Contains(Constants.Response.Exists, json[CommonName.Message].ToString());
         }
 
         [Test]
         public void GameTests_GetUpcomingGames()
         {
             Init(Constants.Path.Game, Method.GET);
-            request.AddParameter("from", DateTime.Now.AddMonths(-1).ToString(CommonConstants.Time.Format));
-            request.AddParameter("to", DateTime.Now.AddMonths(1).ToString(CommonConstants.Time.Format));
-            request.AddParameter("page", Constants.Query.Page);
-            request.AddParameter("pageSize", Constants.Query.PageSize);
+            request.AddParameter(CommonConstants.Query.From, DateTime.Now.AddMonths(-1).ToString(CommonConstants.Time.Format));
+            request.AddParameter(CommonConstants.Query.To, DateTime.Now.AddMonths(1).ToString(CommonConstants.Time.Format));
+            request.AddParameter(CommonConstants.Query.Page, Constants.Query.Page);
+            request.AddParameter(CommonConstants.Query.PageSize, Constants.Query.PageSize);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json["records"].Count().ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Query.Page, json["paginationInfo"]["page"].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json["paginationInfo"]["pageSize"].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json[CommonName.Records].Count().ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Query.Page, json[CommonName.Info][CommonName.Page].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json[CommonName.Info][CommonName.PageSize].ToString());
         }
 
         [TestCaseSource(typeof(GameData), nameof(GameData.CorrectInformation))]
@@ -162,7 +164,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(Constants.Data.Game.TestGameCode, json["records"]["gameCode"].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Data.Game.TestGameCode, json[CommonName.Records][Constants.Name.Code].ToString());
         }
 
         [TestCaseSource(typeof(UpdateData), nameof(UpdateData.EmptyFirstPrize))]
@@ -177,7 +179,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must not be empty", json["errors"]["firstPrize"].First.ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][Constants.Name.First].First.ToString());
         }
 
         [TestCaseSource(typeof(UpdateData), nameof(UpdateData.EmptyConsolationPrize))]
@@ -192,7 +194,7 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
-            StringAssert.Contains("must not be empty", json["errors"]["consolationPrize"].First.ToString());
+            StringAssert.Contains(CommonResponse.NotEmpty, json[CommonName.Errors][Constants.Name.Consolation].First.ToString());
         }
 
         [TestCaseSource(typeof(UpdateData), nameof(UpdateData.CorrectInformation))]
@@ -229,13 +231,13 @@ namespace RESTTest.Game
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.Contains("nextGameDate", json.ToString());
-            StringAssert.Contains("nextGameId", json.ToString());
-            StringAssert.Contains("nextGamePrizeDescription", json.ToString());
-            StringAssert.Contains("nextGameConsolationPrizeDescription", json.ToString());
-            StringAssert.Contains("previousWinner", json.ToString());
-            StringAssert.Contains("previousGamePrizeDescription", json.ToString());
-            StringAssert.Contains("previousGameConsolationPrizeDescription", json.ToString());
+            StringAssert.Contains(Constants.Name.NextGameDate, json.ToString());
+            StringAssert.Contains(Constants.Name.NextGameId, json.ToString());
+            StringAssert.Contains(Constants.Name.NextGamePrizeDescription, json.ToString());
+            StringAssert.Contains(Constants.Name.NextGameConsolationPrizeDescription, json.ToString());
+            StringAssert.Contains(Constants.Name.PreviousWinner, json.ToString());
+            StringAssert.Contains(Constants.Name.PreviousGamePrizeDescription, json.ToString());
+            StringAssert.Contains(Constants.Name.PreviousGameConsolationPrizeDescription, json.ToString());
         }
     }
 }

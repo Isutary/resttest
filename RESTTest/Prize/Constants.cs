@@ -19,5 +19,11 @@
                 public const string IncorrectId = "91659763-0000-0000-0000-08d82fe6b8d8";
             }
         }
+
+        public static class Response
+        {
+            public const string AlreadyClaimed = "Claim request can not be updated for already claimed prizes";
+            public const string Status = "Pending";
+        }
     }
 }

@@ -5,8 +5,9 @@ using RESTTest.Game.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
+using SetupName = RESTTest.Common.Constants.Setup.Name;
 
 namespace RESTTest.Common.Generators
 {
@@ -21,8 +22,8 @@ namespace RESTTest.Common.Generators
         public static void CreateGame(string code, bool isTest = true)
         {
             RestRequest request = new RestRequest(Game.Constants.Path.Game, Method.POST);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
 
             string open = DateTime.Now.AddMinutes(3).ToString(CommonConstants.Time.Format);
             string end = DateTime.Now.AddMinutes(6).ToString(CommonConstants.Time.Format);
@@ -45,29 +46,29 @@ namespace RESTTest.Common.Generators
         public static string GetGameId(string code)
         {
             RestRequest request = new RestRequest(Game.Constants.Path.Game, Method.GET);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
 
-            request.AddParameter("from", DateTime.Now.AddMonths(-1).ToString(CommonConstants.Time.Format));
-            request.AddParameter("to", DateTime.Now.AddMonths(1).ToString(CommonConstants.Time.Format));
-            request.AddParameter("page", Game.Constants.Query.Page);
-            request.AddParameter("pageSize", Game.Constants.Query.PageSize);
+            request.AddParameter(CommonConstants.Query.From, DateTime.Now.AddMonths(-1).ToString(CommonConstants.Time.Format));
+            request.AddParameter(CommonConstants.Query.To, DateTime.Now.AddMonths(1).ToString(CommonConstants.Time.Format));
+            request.AddParameter(CommonConstants.Query.Page, Game.Constants.Query.Page);
+            request.AddParameter(CommonConstants.Query.PageSize, Game.Constants.Query.PageSize);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
 
-            return json["records"]
-                .Where(x => x["gameCode"].ToString() == code)
+            return json[CommonName.Records]
+                .Where(x => x[Game.Constants.Name.Code].ToString() == code)
                 .Select(x => x)
-                .FirstOrDefault()["id"]
+                .FirstOrDefault()[CommonName.Id]
                 .ToString();
         }
 
         public static void DeleteGame(string id)
         {
             RestRequest request = new RestRequest(Game.Constants.Path.Game + $"/{id}", Method.DELETE);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
 
             client.Execute(request);
         }

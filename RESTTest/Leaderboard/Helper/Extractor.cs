@@ -3,6 +3,8 @@ using RestSharp;
 using RESTTest.Common.Setup;
 using RESTTest.Leaderboard.Requests;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
+using SetupName = RESTTest.Common.Constants.Setup.Name;
 
 namespace RESTTest.Leaderboard.Helper
 {
@@ -21,29 +23,29 @@ namespace RESTTest.Leaderboard.Helper
         static Extractor()
         {
             RestRequest request = new RestRequest(Constants.Path.GlobalPrize, Method.GET);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
 
-            CurrentPrizeId = json["records"]["currentPrize"]["id"].ToString();
-            CurrentPrize = json["records"]["currentPrize"]["prizeDescription"].ToString();
-            FuturePrizeId = json["records"]["futurePrize"]["id"].ToString();
-            FuturePrize = json["records"]["futurePrize"]["prizeDescription"].ToString();
+            CurrentPrizeId = json[CommonName.Records][CommonName.CurrentPrize][CommonName.Id].ToString();
+            CurrentPrize = json[CommonName.Records][CommonName.CurrentPrize][CommonName.Description].ToString();
+            FuturePrizeId = json[CommonName.Records][CommonName.FuturePrize][CommonName.Id].ToString();
+            FuturePrize = json[CommonName.Records][CommonName.FuturePrize][CommonName.Description].ToString();
         }
 
         private static void Refresh()
         {
             RestRequest request = new RestRequest(Constants.Path.GlobalPrize, Method.GET);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
 
-            CurrentPrizeId = json["records"]["currentPrize"]["id"].ToString();
-            FuturePrizeId = json["records"]["futurePrize"]["id"].ToString();
+            CurrentPrizeId = json[CommonName.Records][CommonName.CurrentPrize][CommonName.Id].ToString();
+            FuturePrizeId = json[CommonName.Records][CommonName.FuturePrize][CommonName.Id].ToString();
         }
 
         public static void Revert()
@@ -51,8 +53,8 @@ namespace RESTTest.Leaderboard.Helper
             Refresh();
 
             RestRequest request = new RestRequest(Constants.Path.GlobalPrize, Method.GET);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
 
             request.AddJsonBody(new UpdateGlobalPrizeRequest(CurrentPrizeId, CurrentPrize, FuturePrizeId, FuturePrize));
 

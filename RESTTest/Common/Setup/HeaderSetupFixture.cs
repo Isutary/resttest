@@ -1,5 +1,6 @@
 ﻿using RestSharp;
 using CommonConstants = RESTTest.Common.Constants;
+using SetupName = RESTTest.Common.Constants.Setup.Name;
 
 namespace RESTTest.Common.Setup
 {
@@ -18,8 +19,8 @@ namespace RESTTest.Common.Setup
         {
             request = new RestRequest(resource, method);
 
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
         }
     }
 }

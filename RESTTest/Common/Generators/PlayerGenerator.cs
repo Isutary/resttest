@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
-using NUnit.Framework;
 using RestSharp;
 using RESTTest.Common.Setup;
 using RESTTest.Registration.Requests;
 using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
 using CommonConstants = RESTTest.Common.Constants;
+using CommonName = RESTTest.Common.Constants.Name;
+using SetupName = RESTTest.Common.Constants.Setup.Name;
 
 namespace RESTTest.Common.Generators
 {
@@ -21,8 +20,8 @@ namespace RESTTest.Common.Generators
         public static string CreatePlayer(string username, string email, bool isTest = true)
         {
             RestRequest request = new RestRequest(Registration.Constants.Path.Register, Method.POST);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
 
             request.AddJsonBody(new RegisterAccountRequest(
                 Registration.Constants.Data.RegisterAccount.CorrectPassword,
@@ -34,7 +33,7 @@ namespace RESTTest.Common.Generators
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
 
-            string id = json["records"].ToString();
+            string id = json[CommonName.Records].ToString();
 
             if (isTest) Id = id;
             else Players.Add(id);
@@ -44,8 +43,8 @@ namespace RESTTest.Common.Generators
         public static void DeletePlayer(string id)
         {
             RestRequest request = new RestRequest(Registration.Constants.Path.User + $"/{id}", Method.DELETE);
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
-            request.AddHeader("Authorization", AuthenticationSetupFixture.token);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.Authorization, AuthenticationSetupFixture.token);
 
             client.Execute(request);
         }

@@ -36,15 +36,15 @@ namespace RESTTest.Winner
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(Constants.Response.Username, json[CommonName.Records][Constants.Name.FirstName].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.Email, json[CommonName.Records][Constants.Name.Paypal].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.Phone, json[CommonName.Records][Constants.Name.Phone].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.Username, json[CommonName.Records][Constants.Name.Username].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.CorrectId, json[CommonName.Records][Constants.Name.ClaimId].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.Position, json[CommonName.Records][Constants.Name.Position].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.Prize, json[CommonName.Records][Constants.Name.Description].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.Status, json[CommonName.Records][Constants.Name.Status].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.Type, json[CommonName.Records][Constants.Name.Type].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Username, json[CommonName.Records][CommonName.FirstName].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Email, json[CommonName.Records][CommonName.Paypal].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Phone, json[CommonName.Records][CommonName.Phone].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Username, json[CommonName.Records][CommonName.Username].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.CorrectId, json[CommonName.Records][CommonName.ClaimId].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Position, json[CommonName.Records][CommonName.Position].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Prize, json[CommonName.Records][CommonName.Description].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Status, json[CommonName.Records][CommonName.Status].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Type, json[CommonName.Records][CommonName.Type].ToString());
         }
 
         [Test]
@@ -60,9 +60,9 @@ namespace RESTTest.Winner
             JObject json = JObject.Parse(response.Content);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json[CommonName.Records].Count().ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Query.Page, json[Constants.Name.Info][CommonConstants.Query.Page].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Query.PageSize, json[Constants.Name.Info][CommonConstants.Query.PageSize].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.PageSize, json[CommonName.Records].Count().ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Page, json[CommonName.Info][CommonName.Page].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.PageSize, json[CommonName.Info][CommonName.PageSize].ToString());
         }
     }
 }

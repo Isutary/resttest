@@ -41,5 +41,20 @@ namespace RESTTest.Leaderboard
                 public const string Prize = "Rest test prize";
             }
         }
+
+        public static class Name
+        {
+            public const string LeaderboardName = "name";
+            public const string Type = "type";
+            public const string CreatedById = "createdById";
+        }
+
+        public static class Response
+        {
+            public const string Type = "Custom";
+            public const string CreatedById = "2d84c01d-5885-4c51-91a0-045ef918d429";
+            public const string TooLong = "must be 18 characters or fewer";
+            public const string AlreadySubscribed = "already subscribed to leaderboard";
+        }
     }
 }

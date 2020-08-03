@@ -31,5 +31,10 @@
                 public const string White = "White";
             }
         }
+
+        public static class Response
+        {
+            public const string GoldenLivesRule = "Only increasing the number golden lives is permitted";
+        }
     }
 }

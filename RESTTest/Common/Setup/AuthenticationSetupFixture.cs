@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using CommonConstants = RESTTest.Common.Constants;
 using RestSharp;
+using SetupName = RESTTest.Common.Constants.Setup.Name;
 
 namespace RESTTest.Common.Setup
 {
@@ -27,12 +28,12 @@ namespace RESTTest.Common.Setup
         {
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded")
                 .AddObject(new ClientConfig());
-            request.AddHeader("x-tenant-id", CommonConstants.Setup.X_tenant_id);
+            request.AddHeader(SetupName.X_tenant_id, CommonConstants.Setup.X_tenant_id);
 
             IRestResponse response = client.Execute(request);
             JObject json = JObject.Parse(response.Content);
 
-            token += json["access_token"].ToString();
+            token += json[SetupName.Access_token].ToString();
         }
     }
 }
