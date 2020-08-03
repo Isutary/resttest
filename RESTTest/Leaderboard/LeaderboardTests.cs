@@ -28,8 +28,8 @@ namespace RESTTest.Leaderboard
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
             StringAssert.AreEqualIgnoringCase(name, json[CommonName.Records][Constants.Name.LeaderboardName].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.Type, json[CommonName.Records][Constants.Name.LeaderboardName].ToString());
-            StringAssert.AreEqualIgnoringCase(Constants.Response.CreatedById, json[CommonName.Records][Constants.Name.LeaderboardName].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.Type, json[CommonName.Records][Constants.Name.Type].ToString());
+            StringAssert.AreEqualIgnoringCase(Constants.Response.CreatedById, json[CommonName.Records][Constants.Name.CreatedById].ToString());
 
             string id = json[CommonName.Records][CommonName.Id].ToString();
             LeaderboardGenerator.DeleteLeaderboard(id);
